@@ -1,0 +1,21 @@
+{
+  "id": "1", 
+  "name": "order_received",
+  "timestamps": "04-04-2025 15:41:38.29 ", 
+  "event_body": {
+    "fields": [
+      {"name": "order_id",  "type": "string", "doc":"Unique identifier for the order"},
+      {"name": "Customer_id",  "type": "string", "doc":"Unique identifier for the customer"},
+      {"name": "order_date",  "type": "datetime", "doc":"Timstamp when the order was placed"},
+      {"name": "total_amount",  "type": "number", "doc":"Total value of the order"},
+      {"name": "items",  "array": "id", "doc":"The unique id that ideetifie the invoice",
+          "item": {"name": "item", "type": "object", "properties": [
+              {"name": "product_id",  "string": "datetime"},
+              {"name": "quantity",  "type": "number"},
+              {"name": "price",  "array": "number" }]
+          }
+      },
+      {"name": "shipping_address",  "type": "string", "doc":"The unique id that ideetifie the invoice"}
+    ]
+  }
+}

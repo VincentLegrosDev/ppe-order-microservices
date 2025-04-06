@@ -1,0 +1,15 @@
+{
+  "id": "5", 
+  "name": "error",
+  "timestamps": "04-04-2025 15:41:38.29 ", 
+  "event_body": {
+    "fields": [
+      {"name": "error_id",  "type": "string", "doc":"error identifier for the order"},
+      {"name": "error_message",  "type": "string", "doc":"Descripion of the error encountered"},
+      {"name": "order_id",  "type": "string", "doc":"Unique identifier for the order"}, 
+      {"name": "event_type",  "type": "string", "doc":"Type of the event"},
+      {"name": "timestamp",  "type": "datetime", "doc":"Timstamp when the error happened"},
+      {"name": "data",  "type": "object", "doc":"detail data of the failed event"}
+    ]
+  }
+}
