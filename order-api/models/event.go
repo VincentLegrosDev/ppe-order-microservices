@@ -1,7 +1,17 @@
-package models 
+package models
+
+import (
+	"time"
+	"github.com/google/uuid"
+)
 
 type EventBase struct {
-  EventId string
-  EventName string
-  EventTimestamp string
+	EventId        uuid.UUID
+	EventName      string
+	EventTimestamp time.Time
+}
+
+type OrderReceivedEvent struct {
+	EventBase EventBase
+	EventBody Order
 }

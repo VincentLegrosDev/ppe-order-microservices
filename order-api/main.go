@@ -1,40 +1,41 @@
 package main
 
 import (
-	"net/http"
-	"github.com/gin-gonic/gin"
-  "ppe4peeps.com/order-api/services"
+	"github.com/google/uuid"
+	"ppe4peeps.com/order-api/models"
+	"ppe4peeps.com/order-api/producer"
+	"time"
 )
 
-func setupRouter() *gin.Engine {
-	api := gin.Default()
-
-	api.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
-	})
-
-	// Get user value
-	api.POST("createOrder", func(c *gin.Context) {
-		var newCreateOrderEvent services.OrderReceivedEvent
-
-		if err := c.BindJSON(&newCreateOrderEvent); err != nil {
-			return
-		}
-
-
-    if err := services.ProduceOrderEvent(newCreateOrderEvent); err != nil {
-      return
-    } 
-
-		c.IndentedJSON(http.StatusCreated, newCreateOrderEvent)
-
-	})
-
-	return api
-}
-
 func main() {
-	server := setupRouter()
-	// Listen and Server in 0.0.0.0:8080
-	server.Run(":8080")
+
+	product := models.Product{Quantity: 2, ProductId: uuid.New()}
+
+	var order = models.Order{
+		OrderId:  uuid.New(),
+		Products: []models.Product{product},
+		Customer: models.Customer{
+			FirstName:     "Jean",
+			LastName:      "Jacques",
+			EmailAddresse: "emia@email.com",
+			ShippingAddress: models.ShippingAddress{
+				Line1:      "12543 rue deschamps",
+				City:       "MarieVille",
+				State:      "QC",
+				PostalCode: "JS@ 234",
+			},
+		},
+	}
+
+	var orderReceivedEvent = models.OrderReceivedEvent{
+		EventBase: models.EventBase{
+			EventId:        uuid.New(),
+			EventName:      "orderReceivedEvent",
+			EventTimestamp: time.Now(),
+		},
+		EventBody: order,
+	}
+
+	producer.ProduceOrderEvent(orderReceivedEvent)
+
 }
