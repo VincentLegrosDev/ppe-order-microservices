@@ -27,15 +27,15 @@ func main() {
 		},
 	}
 
-	var orderReceivedEvent = models.OrderReceivedEvent{
+	var orderReceivedEvent = models.OrderEvent{
 		EventBase: models.EventBase{
 			EventId:        uuid.New(),
-			EventName:      "orderReceivedEvent",
+			EventName:      models.OrderReceived,
 			EventTimestamp: time.Now(),
 		},
 		EventBody: order,
 	}
 
-	producer.ProduceOrderEvent(orderReceivedEvent)
+	producer.PublishOrderEvent(orderReceivedEvent)
 
 }
