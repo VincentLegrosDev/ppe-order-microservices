@@ -1,21 +1,27 @@
 {
-  "id": "1", 
-  "name": "order_received",
-  "timestamps": "04-04-2025 15:41:38.29 ", 
-  "event_body": {
-    "fields": [
-      {"name": "order_id",  "type": "string", "doc":"Unique identifier for the order"},
-      {"name": "Customer_id",  "type": "string", "doc":"Unique identifier for the customer"},
-      {"name": "order_date",  "type": "datetime", "doc":"Timstamp when the order was placed"},
-      {"name": "total_amount",  "type": "number", "doc":"Total value of the order"},
-      {"name": "items",  "array": "id", "doc":"The unique id that ideetifie the invoice",
-          "item": {"name": "item", "type": "object", "properties": [
-              {"name": "product_id",  "string": "datetime"},
-              {"name": "quantity",  "type": "number"},
-              {"name": "price",  "array": "number" }]
+    "EventBase":{
+       "EventID":"1774f854-07a2-4b85-be12-db31d1684bba",
+       "EventName": "OrderReceived",
+       "EventTimestamp":"2020-08-16T17:47:39.087555-04:00"
+    },
+    "EventBody":{
+       "id":"6e042f29-350b-4d51-8849-5e36456dfa48",
+       "products":[
+          {
+             "productCode":"12345",
+             "quantity":2
           }
-      },
-      {"name": "shipping_address",  "type": "string", "doc":"The unique id that ideetifie the invoice"}
-    ]
-  }
-}
+       ],
+       "customer":{
+          "firstName":"Tom",
+          "lastName":"Hardy",
+          "emailAddress":"tom.hardy@email.com",
+          "shippingAddress":{
+             "line1":"123 Anywhere St",
+             "city":"Anytown",
+             "state":"AL",
+             "postalCode":"12345"
+          }
+       }
+    }
+ }
