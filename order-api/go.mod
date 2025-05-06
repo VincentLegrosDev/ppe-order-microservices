@@ -1,4 +1,4 @@
-module ppe4peeps.com/order-api
+module ppe4peeps.com/services
 
 go 1.24.2
 

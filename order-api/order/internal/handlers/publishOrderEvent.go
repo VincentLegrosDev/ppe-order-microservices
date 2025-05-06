@@ -5,29 +5,33 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"ppe4peeps.com/order-api/models"
-	"ppe4peeps.com/order-api/producer"
+	"ppe4peeps.com/services/models"
+	"ppe4peeps.com/services/producer"
+	"ppe4peeps.com/services/topics"
 )
 
-func createOrderEvent(topic models.TopicName, order models.Order) (models.OrderEvent, error) {
+func createOrderEvent(topic topics.TopicName, order models.Order) (models.OrderEvent, error) {
 	switch topic {
 
-	case models.OrderReceived:
+	case topics.OrderReceived:
 		return models.NewOrderReceivedEvent(order), nil
-	case models.OrderConfirmed:
+	case topics.OrderConfirmed:
 		return models.NewOrderConfirmedEvent(order), nil
-	case models.OrderPackedAndPicked:
+	case topics.OrderPackedAndPicked:
 		return models.NewOrderPackedAndPickedEvent(order), nil
 	default:
 		return models.OrderEvent{}, errors.New("Unvalid order topic")
 	}
 }
 
-func PublishOrderEvent(c *gin.Context, topic models.TopicName) error {
+func PublishOrderEvent(c *gin.Context, topic topics.TopicName) error {
 	var order models.Order
 
-	if err := c.BindJSON(&order); err != nil {
-		log.Printf("Error serializing post data (%s)\n", err)
+	if err := c.ShouldBindJSON(&order); err != nil {
+		log.Printf("Error serializing post data (%s)\n", err) 
+		errorEvent := models.NewErrorEvent(models.NewOrderReceivedEvent(order))
+		producer.PublishEvent(errorEvent) 
+		c.AbortWithError(http.StatusBadRequest, err);
 		return err
 	}
 
@@ -35,13 +39,14 @@ func PublishOrderEvent(c *gin.Context, topic models.TopicName) error {
 
 	if err != nil {
 		log.Printf("Error creating event (%s)\n", err)
+		c.AbortWithError(http.StatusBadRequest, err);
+		errorEvent := models.NewErrorEvent(models.NewOrderReceivedEvent(order))
+		producer.PublishEvent(errorEvent) 
 		return err
 	}
 
-	producer.PublishOrderEvent(newOrderEvent)
-
-	log.Printf("Success (%s)\n", err)
-
+	producer.PublishEvent(newOrderEvent)
+	log.Printf("Success (%s)\n", newOrderEvent.Topic())
 	c.String(http.StatusOK, "ok")
 
 	return nil

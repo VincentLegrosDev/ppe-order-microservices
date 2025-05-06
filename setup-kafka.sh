@@ -11,6 +11,12 @@ docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe -
 docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 1 --config retention.ms=10800000 --topic OrderPickedAndPacked
 docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic OrderPickedAndPacked
 
-docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 1 --config retention.ms=10800000 --topic Notifications
-docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic Notifications
+docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 1 --config retention.ms=10800000 --topic Notification
+docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic Notification
+
+docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 1 --config retention.ms=10800000 --topic Error
+docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic Error
+
+docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 1 --config retention.ms=10800000 --topic DeadQueueLetter
+docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic DeadQueueLetter
 

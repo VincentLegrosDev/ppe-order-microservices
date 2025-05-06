@@ -5,7 +5,7 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"ppe4peeps.com/order-api/order/cmd/server"
+	"ppe4peeps.com/services/order/cmd/server"
 )
 
 func main() {

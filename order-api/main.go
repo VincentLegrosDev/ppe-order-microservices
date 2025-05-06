@@ -2,14 +2,15 @@ package main
 
 import (
 	"github.com/google/uuid"
-	"ppe4peeps.com/order-api/models"
-	"ppe4peeps.com/order-api/producer"
+	"ppe4peeps.com/services/models"
+	"ppe4peeps.com/services/producer"
+	"ppe4peeps.com/services/topics"
 	"time"
 )
 
 func main() {
 
-	product := models.Product{Quantity: 2, ProductId: uuid.New()}
+	product := models.Product{Quantity: 2, ProductCode: "1231",}
 
 	var order = models.Order{
 		OrderId:  uuid.New(),
@@ -17,7 +18,7 @@ func main() {
 		Customer: models.Customer{
 			FirstName:     "Jean",
 			LastName:      "Jacques",
-			EmailAddresse: "emia@email.com",
+			EmailAddress: "emia@email.com",
 			ShippingAddress: models.ShippingAddress{
 				Line1:      "12543 rue deschamps",
 				City:       "MarieVille",
@@ -30,12 +31,12 @@ func main() {
 	var orderReceivedEvent = models.OrderEvent{
 		EventBase: models.EventBase{
 			EventId:        uuid.New(),
-			EventName:      models.OrderReceived,
+			EventName:      topics.OrderReceived,
 			EventTimestamp: time.Now(),
 		},
 		EventBody: order,
 	}
 
-	producer.PublishOrderEvent(orderReceivedEvent)
+	producer.PublishEvent(orderReceivedEvent)
 
 }

@@ -1,0 +1,19 @@
+{
+  "OrderId":"6e042f29-350b-4d51-8849-5e36456dfa48",
+  "products":[
+    {
+      "productCode": ""
+    }
+  ],
+  "customer":{
+    "firstName": "v", 
+    "lastName":"Hardy",
+    "emailAddress":"tom.hardy@email.com",
+    "shippingAddress":{
+      "line1":"123 Anywhere St",
+      "city":"Anytown",
+      "state":"AL",
+      "postalCode":"12345"
+    }
+  }
+}

@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"github.com/IBM/sarama"
 	"log"
-	"ppe4peeps.com/order-api/models"
+	"ppe4peeps.com/services/models"
 )
 
-func PublishOrderEvent(orderEvent models.OrderEvent) error {
+func PublishEvent(orderEvent models.Event) error {
 
 	orderInBytes, err := json.Marshal(orderEvent)
 	if err != nil {
@@ -16,7 +16,9 @@ func PublishOrderEvent(orderEvent models.OrderEvent) error {
 
 	producer, err := newProducer()
 
+
 	if err != nil {
+    log.Printf("error: (%s)", err) 
 		return err
 	}
 
@@ -29,7 +31,7 @@ func PublishOrderEvent(orderEvent models.OrderEvent) error {
 
 	partition, offset, err := producer.SendMessage(msg)
 	if err != nil {
-    log.Printf("error: (%s)", err)
+    log.Printf("error: (%s)", err) 
 		return err
 	}
 
