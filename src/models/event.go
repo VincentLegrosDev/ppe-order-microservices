@@ -7,31 +7,32 @@ import (
 )
 
 type Event interface {
-//	OrderEvent | ErrorEvent | NotificationEvent
 	Topic() string
+	Id() uuid.UUID 
 }
 
 type EventName string
 
 type EventBase struct {
-	EventId        uuid.UUID
-	EventName      topics.TopicName
-	EventTimestamp time.Time
+	EventId        uuid.UUID `json:"eventId" binding:"required"`
+	EventName      topics.TopicName `json:"eventName" binding:"required"`
+	EventTimestamp time.Time `json:"eventTimestamp" binding:"required"`
 }
 
+
 type OrderEvent struct{
-	EventBase EventBase
-	EventBody Order
+	EventBase EventBase `json:"eventBase" binding:"required"`
+	EventBody Order `json:"eventBody" binding:"required"`
 }  
 
-type ErrorEvent struct{
-	EventBase EventBase
-	EventBody OrderEvent
+type ErrorEvent [T Event] struct {
+	EventBase EventBase `json:"eventBase" binding:"required"`
+	EventBody T `json:"eventBody" binding:"required"`
 }
 
 type NotificationEvent struct {
-	EventBase EventBase
-	EventBody Notification
+	EventBase EventBase `json:"eventBase" binding:"required"`
+	EventBody Notification `json:"eventBody" binding:"required"`
 }
 
 func (event OrderEvent) Topic() string {
@@ -42,10 +43,21 @@ func (event NotificationEvent) Topic() string {
 	return string(event.EventBase.EventName)
 }  
 
-func (event ErrorEvent) Topic() string {
+func (event ErrorEvent [T]) Topic() string { 
 	return string(event.EventBase.EventName)
 }
 
+func (event OrderEvent) Id() uuid.UUID {
+	return event.EventBase.EventId
+}  
+
+func (event NotificationEvent) Id()  uuid.UUID{
+	return event.EventBase.EventId
+}  
+
+func (event ErrorEvent [T]) Id() uuid.UUID { 
+	return event.EventBase.EventId 
+}
 
 func (event OrderEvent) Order() Order  {
 	return event.EventBody
@@ -84,8 +96,8 @@ func NewOrderPackedAndPickedEvent(order Order) OrderEvent {
 	} 
 }
 
-func NewErrorEvent(event OrderEvent) ErrorEvent {  
-	return ErrorEvent{
+func NewErrorEvent[T Event](event T) ErrorEvent[T] {      
+	return ErrorEvent[T]{
 		EventBase: EventBase{
 			EventId: uuid.New(),
 			EventName: topics.DeadQueueLetter,

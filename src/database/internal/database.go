@@ -5,15 +5,9 @@ import (
 	"fmt"
 	"os"
 	"log"
-	"database/sql"
+	"database/sql" 
 	 _ "github.com/lib/pq"
 )
-
-
-type Database struct {
-	url  string
-	DB *sql.DB 
-}
 
 func InitDatabase() *sql.DB {  
 	dbURL := fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable", 

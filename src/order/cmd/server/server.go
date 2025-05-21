@@ -14,5 +14,9 @@ func SetupRouter() *gin.Engine {
 		handlers.PublishOrderEvent(c, topics.OrderReceived)
 	})
 
+	api.POST("orderShipped", func(c *gin.Context) {
+		handlers.PublishOrderEvent(c,topics.OrderPackedAndPicked)
+	})
+
 	return api
 }

@@ -20,7 +20,7 @@ type ShippingAddress struct {
 	Line1      string `json:"line1" binding:"required"`
 	City       string `json:"city" binding:"required"`
 	State      string `json:"state" binding:"required"`
-	PostalCode string `json:"postalCode" vbinding:"required"`
+	PostalCode string `json:"postalCode" binding:"required"`
 }
 
 type Order struct {
