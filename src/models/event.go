@@ -19,7 +19,6 @@ type EventBase struct {
 	EventTimestamp time.Time `json:"eventTimestamp" binding:"required"`
 }
 
-
 type OrderEvent struct{
 	EventBase EventBase `json:"eventBase" binding:"required"`
 	EventBody Order `json:"eventBody" binding:"required"`
@@ -35,6 +34,11 @@ type NotificationEvent struct {
 	EventBody Notification `json:"eventBody" binding:"required"`
 }
 
+type KeyPerformanceIndicatorEvent struct {
+	EventBase EventBase `json:"eventBase" binding:"required"`
+	EventBody KeyPerformanceIndicator `json:"eventBody" binding:"required"`
+}
+
 func (event OrderEvent) Topic() string {
 	return string(event.EventBase.EventName)
 }  
@@ -44,6 +48,10 @@ func (event NotificationEvent) Topic() string {
 }  
 
 func (event ErrorEvent [T]) Topic() string { 
+	return string(event.EventBase.EventName)
+}
+
+func (event KeyPerformanceIndicatorEvent) Topic() string {
 	return string(event.EventBase.EventName)
 }
 
@@ -57,6 +65,10 @@ func (event NotificationEvent) Id()  uuid.UUID{
 
 func (event ErrorEvent [T]) Id() uuid.UUID { 
 	return event.EventBase.EventId 
+}
+
+func (event KeyPerformanceIndicatorEvent) Id() uuid.UUID {
+	return event.EventBase.EventId
 }
 
 func (event OrderEvent) Order() Order  {
@@ -116,7 +128,19 @@ func NewNotificationEvent(notification Notification) NotificationEvent {
 		}, 
 		EventBody: notification,
 	}
-
 }
+
+func NewKeyPerformanceIndicatorEvent(keyPerformanceIndicator KeyPerformanceIndicator) KeyPerformanceIndicatorEvent {
+	return KeyPerformanceIndicatorEvent{
+		EventBase: EventBase {
+			EventId: uuid.New(), 
+			EventName: topics.KeyPerformanceIndicator, 
+		EventTimestamp: time.Now(), 
+		}, 
+		EventBody: keyPerformanceIndicator, 
+	}
+}
+
+
 
 
