@@ -10,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
+	"strconv"
 )
 
 func main() { 
@@ -87,4 +88,35 @@ func consumeOrderConfirmedEvent(msg string) {
 
 	log.Printf("Order id: %v is confirmed",orderConfirmedEvent.EventBase.EventId); 
 	log.Printf("order id: %v notification send ", orderConfirmedEvent.EventBase.EventId)
+
+	publishOrderTimeMetric(orderConfirmedEvent.Order());
+}
+
+
+
+func publishOrderTimeMetric(order models.Order) error { 
+
+		tag1 := models.Tag{
+			Name:  "products_ordered",
+			Value: strconv.Itoa(len(order.Products)),
+		}
+		tag2 := models.Tag{
+			Name:  "order_id",
+			Value: order.OrderId.String(),
+		}
+		tag3 :=  models.Tag{
+			Name:  "process_step",
+			Value: "warehouse",
+		}
+		tags := []models.Tag{tag1, tag2, tag3}
+
+		if err := producer.PublishEvent(models.NewOrderTimeEvent(models.OrderTimeMetric{
+			Tags: tags,
+			Count: 1,
+
+		})); err != nil {
+			return err;
+		}
+
+	return  nil 
 }

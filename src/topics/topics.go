@@ -9,8 +9,8 @@ const (
 	Error 							 		TopicName = "Error"
 	Notification         		TopicName = "Notification"
 	DeadQueueLetter      		TopicName = "DeadQueueLetter"
-	KeyPerformanceIndicator TopicName = "KeyPerformanceIndicator"
-	
+	OrderTimeMetric 				TopicName = "OrderTimeMetric"
+	OrderCountMetric				TopicName = "OrderCountMetric"
 ) 
 
 func (topic TopicName) String() string {

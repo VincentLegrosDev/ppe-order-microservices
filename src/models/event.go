@@ -34,9 +34,14 @@ type NotificationEvent struct {
 	EventBody Notification `json:"eventBody" binding:"required"`
 }
 
-type KeyPerformanceIndicatorEvent struct {
+type OrderTimeEvent struct {
 	EventBase EventBase `json:"eventBase" binding:"required"`
-	EventBody KeyPerformanceIndicator `json:"eventBody" binding:"required"`
+	EventBody OrderTimeMetric `json:"eventBody" binding:"required"`
+}
+
+type OrderCountEvent struct {
+	EventBase EventBase `json:"eventBase" binding:"required"`
+	EventBody OrderCountMetric `json:"eventBody" binding:"required"`
 }
 
 func (event OrderEvent) Topic() string {
@@ -51,7 +56,11 @@ func (event ErrorEvent [T]) Topic() string {
 	return string(event.EventBase.EventName)
 }
 
-func (event KeyPerformanceIndicatorEvent) Topic() string {
+func (event OrderCountEvent) Topic() string {
+	return string(event.EventBase.EventName)
+}
+
+func (event OrderTimeEvent) Topic() string {
 	return string(event.EventBase.EventName)
 }
 
@@ -67,7 +76,11 @@ func (event ErrorEvent [T]) Id() uuid.UUID {
 	return event.EventBase.EventId 
 }
 
-func (event KeyPerformanceIndicatorEvent) Id() uuid.UUID {
+func (event OrderCountEvent) Id() uuid.UUID {
+	return event.EventBase.EventId
+}
+
+func (event OrderTimeEvent) Id() uuid.UUID {
 	return event.EventBase.EventId
 }
 
@@ -130,14 +143,23 @@ func NewNotificationEvent(notification Notification) NotificationEvent {
 	}
 }
 
-func NewKeyPerformanceIndicatorEvent(keyPerformanceIndicator KeyPerformanceIndicator) KeyPerformanceIndicatorEvent {
-	return KeyPerformanceIndicatorEvent{
+func NewOrderCountEvent(orderCountMetric OrderCountMetric) OrderCountEvent {
+	return OrderCountEvent {
 		EventBase: EventBase {
-			EventId: uuid.New(), 
-			EventName: topics.KeyPerformanceIndicator, 
-		EventTimestamp: time.Now(), 
-		}, 
-		EventBody: keyPerformanceIndicator, 
+			EventId: uuid.New(),  
+			EventName: topics.OrderCountMetric, 
+		},
+		EventBody: orderCountMetric, 
+	}
+}
+
+func NewOrderTimeEvent(orderTimeMetric OrderTimeMetric) OrderTimeEvent {
+	return OrderTimeEvent {
+		EventBase: EventBase {
+			EventId: uuid.New(),  
+			EventName: topics.OrderTimeMetric, 
+		},
+		EventBody: orderTimeMetric, 
 	}
 }
 

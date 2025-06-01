@@ -20,6 +20,9 @@ docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe -
 docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 1 --config retention.ms=10800000 --topic DeadQueueLetter
 docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic DeadQueueLetter
 
-docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 1 --config retention.ms=10800000 --topic keyPerformanceIndicator
-docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic keyPerformanceIndicator
+docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 1 --config retention.ms=10800000 --topic OrderCountMetric
+docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic  OrderCountMetric 
+
+docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --create --replication-factor 1 --partitions 1 --config retention.ms=10800000 --topic OrderTimeMetric
+docker exec -it kafka kafka-topics.sh --bootstrap-server kafka:9092 --describe --topic  OrderTimeMetric 
 

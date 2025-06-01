@@ -10,7 +10,6 @@ import (
 	"github.com/joho/godotenv"
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
-	"time"
 )
 
 func main() { 
@@ -31,7 +30,6 @@ func consumeOrderReceivedEvent(msg string) {
 		producer.PublishEvent(errorEvent);
 		log.Printf("error converting event to json: %s", msg)  
 		log.Printf("detail: %#v", err)
-		sendErrorKPI();
 		return
 	}  
 
@@ -43,13 +41,11 @@ func consumeOrderReceivedEvent(msg string) {
 		errorEvent := models.NewErrorEvent(orderEvent) 
 		producer.PublishEvent(errorEvent);
 		log.Printf("error unable to verify is event if processed")   
-		sendErrorKPI();
 		return
 	}  
 
 	if isProcessed {
 		log.Printf("event id: %v, already processed", orderEvent.EventBase.EventId )
-		sendErrorKPI();
 		return
 	}
 
@@ -60,7 +56,6 @@ func consumeOrderReceivedEvent(msg string) {
 		errorEvent := models.NewErrorEvent(orderEvent) 
 		producer.PublishEvent(errorEvent);
 		log.Printf("error validating error event to json: %+v", err)  
-		sendErrorKPI();
 		return
 	}
 
@@ -70,7 +65,6 @@ func consumeOrderReceivedEvent(msg string) {
 		errorEvent := models.NewErrorEvent(orderEvent); 
 		producer.PublishEvent(errorEvent);
 		log.Fatal("unable to register order into database") 
-		sendErrorKPI();
 		return
 	}
 
@@ -81,25 +75,9 @@ func consumeOrderReceivedEvent(msg string) {
 		errorEvent := models.NewErrorEvent(orderConfirmedEvent); 
 		producer.PublishEvent(errorEvent);
 		log.Fatal("error confirming order") 
-		sendErrorKPI();
 		return
 	}
 
 	log.Printf("Order id: %s received",orderEvent.EventBase.EventId); 
 	log.Printf("Order details: %#v", orderEvent)
-}
-
-var errorCount uint = 0
-
-
-func sendErrorKPI() {
-	errorCount++ 
-	KPIEvent := models.NewKeyPerformanceIndicatorEvent(models.KeyPerformanceIndicator{
-		Name: "error count order",
-		MetricName: "error count", 
-		Value: errorCount,
-		Timestamp: time.Now(),
-	})
-
-	producer.PublishEvent(KPIEvent)
 }
